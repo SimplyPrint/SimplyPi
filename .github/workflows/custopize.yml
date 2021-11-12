@@ -95,7 +95,7 @@ jobs:
         server: ${{ secrets.UPLOAD_SERVER }}
         ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }} 
         local_path: "build/${{ env.IMAGE }}.zip"
-        remote_path: "/simplypi-new.zip"
+        remote_path: "/home/githubsimplypiimage/"
         args: "-o ConnectTimeout=5"
     - name: "📝 Prepare release"
       run: |
