@@ -87,16 +87,7 @@ jobs:
         zip $IMAGE.zip $IMAGE
         md5sum $IMAGE.zip > $IMAGE.zip.md5
         sha256sum $IMAGE.zip > $IMAGE.zip.sha256
-    
-    - name: "🔖 Upload to SimplyPrint server"
-      uses: wlixcc/SFTP-Deploy-Action@v1.2.1
-      with:
-        username: ${{ secrets.UPLOAD_USERNAME }}
-        server: ${{ secrets.UPLOAD_SERVER }}
-        ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }} 
-        local_path: "build/${{ env.IMAGE }}.zip"
-        remote_path: "/home/githubsimplypiimage/"
-        args: "-o ConnectTimeout=5"
+
     - name: "📝 Prepare release"
       run: |
         RELEASE_NAME="OctoPi ${{ steps.octopi_latestrelease.outputs.release }} with OctoPrint ${{ env.OCTOPRINT_VERSION }} and SimplyPrint ${{ steps.simplyprint_version.outputs.release }}"
