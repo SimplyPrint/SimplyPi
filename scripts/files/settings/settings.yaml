@@ -1,0 +1,4 @@
+plugins:
+  SimplyPrint:
+    sp_local_installed: true
+    from_image: true
