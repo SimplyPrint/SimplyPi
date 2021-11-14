@@ -79,7 +79,7 @@ jobs:
         OCTOPI_VERSION="${{ steps.octopi_latestrelease.outputs.release }}"
         OCTOPRINT_VERSION="${{ env.OCTOPRINT_VERSION }}"
         
-        IMAGE="octopi-$OCTOPI_VERSION-octoprint-$OCTOPRINT_VERSION-simplyprint-${{ steps.simplyprint_version.outputs.release }}.img"
+        IMAGE="SimplyPi-${{ steps.octopi_latestrelease.outputs.release }}-sp${{ steps.simplyprint_version.outputs.release }}-octoprint${{ env.OCTOPRINT_VERSION }}.img"
         echo "IMAGE=$IMAGE" >> $GITHUB_ENV
 
         cd build
@@ -90,7 +90,7 @@ jobs:
 
     - name: "📝 Prepare release"
       run: |
-        RELEASE_NAME="OctoPi ${{ steps.octopi_latestrelease.outputs.release }} with OctoPrint ${{ env.OCTOPRINT_VERSION }} and SimplyPrint ${{ steps.simplyprint_version.outputs.release }}"
+        RELEASE_NAME="SimplyPi with OctoPrint ${{ env.OCTOPRINT_VERSION }}, SimplyPrint ${{ steps.simplyprint_version.outputs.release }} (based on OctoPi ${{ steps.octopi_latestrelease.outputs.release }})"
         echo "RELEASE_NAME=$RELEASE_NAME" >> $GITHUB_ENV
 
         RELEASE_TAG="${{ steps.octopi_latestrelease.outputs.release }}.op${{ env.OCTOPRINT_VERSION }}.sp${{ steps.simplyprint_version.outputs.release }}"
