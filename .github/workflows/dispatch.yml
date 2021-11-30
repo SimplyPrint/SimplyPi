@@ -37,6 +37,7 @@ jobs:
       uses: pozetroninc/github-action-get-latest-release@master
       with:
         repository: SimplyPrint/OctoPrint-SimplyPrint
+        excludes: prerelease, draft
 
     - name: 💁 Print Versions
       run: |
