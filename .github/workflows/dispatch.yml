@@ -25,12 +25,14 @@ jobs:
       uses: pozetroninc/github-action-get-latest-release@master
       with:
         repository: OctoPrint/OctoPrint
+        excludes: prerelease, draft
 
     - id: octopi_latestrelease
       name: 🔎 Get OctoPi Version
       uses: pozetroninc/github-action-get-latest-release@master
       with:
         repository: guysoft/OctoPi
+        excludes: prerelease, draft
 
     - id: simplyprint_latestrelease
       name: 🔎 Get SimplyPrint Version
