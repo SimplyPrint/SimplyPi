@@ -1,6 +1,6 @@
 # 🤖 SimplyPi
 
-*The latest OctoPi release with the latest OctoPrint already included and [Simply Print Plugin](https://github.com/SimplyPrint/OctoPrint-SimplyPrint) pre-installed.*
+*The latest OctoPi release with the latest OctoPrint already included and [SimplyPrint Plugin](https://github.com/SimplyPrint/OctoPrint-SimplyPrint) pre-installed.*
 
 This repository automatically updates the OctoPrint installation on the latest OctoPi image
 and provides the resulting image ready to flash. Checkout the [releases](https://github.com/SimplyPrint/SimplyPi/releases).
