@@ -33,7 +33,7 @@ else:
 
 model_info_match = re.search(r"Model\s+:\s(.+)$", cpuinfo, re.MULTILINE)
 if model_info_match:
-    model_info = pi_map[model_info_match.group(1).strip()]
+    model_info = pi_map[model_info_match.group(1).strip()] or 'unknown'
 else:
     model_info = 'unknown'
 
