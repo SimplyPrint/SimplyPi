@@ -1,10 +1,26 @@
 import os
 import re
-import time
 import subprocess
 import reset_lib
 
-pi_map = {'Raspberry Pi Zero 2 W Rev 1.0': 'PiZero2'}
+pi_map = {'Raspberry Pi Zero 2 W Rev 1.0': 'PiZero2',
+          'Raspberry Pi 3 Model B Rev 1.2': 'Pi3B',
+          'Raspberry Pi 3 Model B Plus Rev 1.3': 'Pi3B+',
+          'Raspberry Pi 4 Model B Rev 1.2': 'Pi4B',
+          'Raspberry Pi 4 Model B Rev 1.1': 'Pi4B',
+          'Raspberry Pi 4 Model B Rev 1.4': 'Pi4B',
+          'Raspberry Pi 2 Model B Rev 1.1': 'Pi2B',
+          'Raspberry Pi Zero W Rev 1.1': 'PiZero',
+          'Raspberry Pi Zero 2 Rev 1.0': 'PiZero2',
+          'Raspberry Pi 3 Model A Plus Rev 1.0': 'Pi3A',
+          'Raspberry Pi Model B Rev 2': 'Pi1B',
+          'Raspberry Pi Model B Plus Rev 1.2': 'Pi1B+',
+          'Raspberry Pi 400 Rev 1.0': 'Pi400',
+          'Hardkernel Odroid XU4': 'OdroidXU4',
+          'Raspberry Pi Compute Module 3 Plus Rev 1.0': 'PiCompute3+',
+          'Xunlong Orange Pi Zero': 'OrangePiZero',
+          'Xunlong Orange Pi PC': 'OrangePiPC'
+          }
 
 counter = 0
 cpuinfo = subprocess.check_output(['cat', '/proc/cpuinfo']).decode('utf-8')
@@ -29,6 +45,5 @@ reboot_required = reset_lib.wpa_check_activate(config_hash['wpa_enabled'], confi
 
 reboot_required = reset_lib.update_ssid(ssid_prefix, serial_last_four, model_info)
 
-if reboot_required == True:
+if reboot_required:
     os.system('reboot')
-
