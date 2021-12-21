@@ -2,6 +2,7 @@ import time
 import sys
 import os
 import reset_lib
+import requests
 
 no_conn_counter = 0
 consecutive_active_reports = 0
@@ -36,4 +37,9 @@ else:
         # equal to the auto_config_delay specified in the /etc/raspiwifi/raspiwifi.conf
         # trigger a reset into AP Host (Configuration) mode.
         if no_conn_counter >= int(config_hash['auto_config_delay']):
-            reset_lib.reset_to_host_mode()
+            check_reboot = requests.get("http://locahost:5000/plugin/SimplyPrint/can_reboot")
+            if check_reboot.json().get("can_reboot", False) is True:
+                reset_lib.reset_to_host_mode()
+            else:
+                no_conn_counter = 0
+
