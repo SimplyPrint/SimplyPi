@@ -37,7 +37,7 @@ else:
         # equal to the auto_config_delay specified in the /etc/raspiwifi/raspiwifi.conf
         # trigger a reset into AP Host (Configuration) mode.
         if no_conn_counter >= int(config_hash['auto_config_delay']):
-            check_reboot = requests.get("http://locahost:5000/plugin/SimplyPrint/can_reboot")
+            check_reboot = requests.get("http://localhost:5000/plugin/SimplyPrint/can_reboot")
             if check_reboot.json().get("can_reboot", False) is True:
                 reset_lib.reset_to_host_mode()
             else:
