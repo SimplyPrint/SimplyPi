@@ -8,7 +8,7 @@ install_cleanup_trap
 
 plugins=(
     # add quoted URLs for install archives, separated by newlines, e.g.:
-    "https://github.com/SimplyPrint/OctoPrint-SimplyPrint/archive/refs/heads/master.zip"
+    "https://github.com/SimplyPrint/OctoPrint-SimplyPrint/archive/refs/tags/3.1.2rc9.zip"
     "https://github.com/eyal0/OctoPrint-PrintTimeGenius/archive/master.zip"
 )
 

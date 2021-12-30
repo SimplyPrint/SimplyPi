@@ -41,12 +41,14 @@ jobs:
       uses: pozetroninc/github-action-get-latest-release@master
       with:
         repository: guysoft/OctoPi
+        excludes: prerelease, draft
 
     - name: "🔎 Determine SimplyPrint version"
       id: simplyprint_version
       uses: pozetroninc/github-action-get-latest-release@master
       with:
         repository: SimplyPrint/OctoPrint-SimplyPrint
+        excludes: prerelease, draft
 
     - name: "⬇ Download latest OctoPi"
       id: octopi_download
