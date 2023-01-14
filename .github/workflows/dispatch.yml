@@ -54,7 +54,7 @@ jobs:
 
     - name: 🚀 Repository Dispatch
       if: ${{ format('{0}.op{1}.sp{2}', steps.octopi_latestrelease.outputs.release, steps.octoprint_latestrelease.outputs.release, steps.simplyprint_latestrelease.outputs.release) != steps.my_latestrelease.outputs.release }}
-      uses: peter-evans/repository-dispatch@v1
+      uses: peter-evans/repository-dispatch@v2
       with:
         token: ${{ secrets.REPODISPATCH_TOKEN }}
         repository: SimplyPrint/SimplyPi
