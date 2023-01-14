@@ -12,34 +12,38 @@ jobs:
     steps:
 
     - name: ⬇ Checkout
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - id: my_latestrelease
       name: 🔎 Get My Version
-      uses: pozetroninc/github-action-get-latest-release@master
+      uses: jneilliii/github-action-get-latest-release@master
       with:
         repository: ${{ github.repository }}
+        token: ${{ secrets.REPODISPATCH_TOKEN }}
 
     - id: octoprint_latestrelease
       name: 🔎 Get OctoPrint Version
-      uses: pozetroninc/github-action-get-latest-release@master
+      uses: jneilliii/github-action-get-latest-release@master
       with:
         repository: OctoPrint/OctoPrint
         excludes: prerelease, draft
+        token: ${{ secrets.REPODISPATCH_TOKEN }}
 
     - id: octopi_latestrelease
       name: 🔎 Get OctoPi Version
-      uses: pozetroninc/github-action-get-latest-release@master
+      uses: jneilliii/github-action-get-latest-release@master
       with:
         repository: guysoft/OctoPi
         excludes: prerelease, draft
+        token: ${{ secrets.REPODISPATCH_TOKEN }}
 
     - id: simplyprint_latestrelease
       name: 🔎 Get SimplyPrint Version
-      uses: pozetroninc/github-action-get-latest-release@master
+      uses: jneilliii/github-action-get-latest-release@master
       with:
         repository: SimplyPrint/OctoPrint-SimplyPrint
         excludes: prerelease, draft
+        token: ${{ secrets.REPODISPATCH_TOKEN }}
 
     - name: 💁 Print Versions
       run: |
