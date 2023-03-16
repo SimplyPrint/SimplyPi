@@ -17,36 +17,29 @@ jobs:
     steps:
 
     - name: "⬇ Checkout"
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
-    - name: "🔎 Determine OctoPrint version"
-      run: |
-        if [[ "${{ github.event_name }}" = "repository_dispatch" ]]; then
-          OCTOPRINT_VERSION="${{ github.event.client_payload.version }}"
-        else
-          OCTOPRINT_VERSION="${{ github.event.inputs.octoprint_version }}"
-        fi
+    - name: "🔎 Get OctoPrint Version"
+      id: octoprint_latestrelease
+      uses: jneilliii/github-action-get-latest-release@master
+      with:
+        repository: OctoPrint/OctoPrint
+        excludes: prerelease, draft
+        token: ${{ secrets.GITHUB_TOKEN }}
 
-        if [ -z "$OCTOPRINT_VERSION" ]; then
-          OCTOPRINT_VERSION=$(curl https://pypi.org/pypi/OctoPrint/json -s | jq -r '.info.version')
-        fi
-
-        # Make sure we have a published version
-        curl -fsSL --output /dev/null --head https://pypi.org/pypi/OctoPrint/$OCTOPRINT_VERSION/ || exit 1
-
-        echo "OCTOPRINT_VERSION=$OCTOPRINT_VERSION" >> $GITHUB_ENV
-
-    - name: 🔎 Get OctoPi Version
+    - name: "🔎 Get OctoPi Version"
       id: octopi_latestrelease
-      uses: pozetroninc/github-action-get-latest-release@master
+      uses: jneilliii/github-action-get-latest-release@master
       with:
         repository: guysoft/OctoPi
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: "🔎 Determine SimplyPrint version"
       id: simplyprint_version
-      uses: pozetroninc/github-action-get-latest-release@master
+      uses: jneilliii/github-action-get-latest-release@master
       with:
         repository: SimplyPrint/OctoPrint-SimplyPrint
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: "⬇ Download latest OctoPi"
       id: octopi_download
@@ -61,14 +54,11 @@ jobs:
         IMAGE=$(ls *.img | head -n 1)
         mv $IMAGE input.img
 
-        OCTOPI_VERSION=$(basename -s .img $IMAGE | awk -F"-" '{print $NF}')
-        echo "OCTOPI_VERSION=$OCTOPI_VERSION" >> $GITHUB_ENV
-
     - name: "🏗 Run CustoPiZer"
       run: |
         sudo modprobe loop
         docker run --rm --privileged \
-          -e OCTOPRINT_VERSION=${{ env.OCTOPRINT_VERSION }} \
+          -e OCTOPRINT_VERSION=${{ steps.octoprint_latestrelease.outputs.release }} \
           -v ${{ github.workspace }}/scripts/files/config.local:/CustoPiZer/config.local \
           -v ${{ github.workspace }}/build:/CustoPiZer/workspace \
           -v ${{ github.workspace }}/scripts:/CustoPiZer/workspace/scripts \
@@ -77,9 +67,9 @@ jobs:
     - name: "📦 Package the image"
       run: |
         OCTOPI_VERSION="${{ steps.octopi_latestrelease.outputs.release }}"
-        OCTOPRINT_VERSION="${{ env.OCTOPRINT_VERSION }}"
+        OCTOPRINT_VERSION="${{ steps.octoprint_latestrelease.outputs.release }}"
         
-        IMAGE="SimplyPi-${{ steps.octopi_latestrelease.outputs.release }}-sp${{ steps.simplyprint_version.outputs.release }}-octoprint${{ env.OCTOPRINT_VERSION }}.img"
+        IMAGE="SimplyPi-${{ steps.octopi_latestrelease.outputs.release }}-sp${{ steps.simplyprint_version.outputs.release }}-octoprint${{ steps.octoprint_latestrelease.outputs.release }}.img"
         echo "IMAGE=$IMAGE" >> $GITHUB_ENV
 
         cd build
@@ -90,10 +80,10 @@ jobs:
 
     - name: "📝 Prepare release"
       run: |
-        RELEASE_NAME="SimplyPi with OctoPrint ${{ env.OCTOPRINT_VERSION }}, SimplyPrint ${{ steps.simplyprint_version.outputs.release }} (based on OctoPi ${{ steps.octopi_latestrelease.outputs.release }})"
+        RELEASE_NAME="SimplyPi with OctoPrint ${{ steps.octoprint_latestrelease.outputs.release }}, SimplyPrint ${{ steps.simplyprint_version.outputs.release }} (based on OctoPi ${{ steps.octopi_latestrelease.outputs.release }})"
         echo "RELEASE_NAME=$RELEASE_NAME" >> $GITHUB_ENV
 
-        RELEASE_TAG="${{ steps.octopi_latestrelease.outputs.release }}.op${{ env.OCTOPRINT_VERSION }}.sp${{ steps.simplyprint_version.outputs.release }}"
+        RELEASE_TAG="${{ steps.octopi_latestrelease.outputs.release }}.op${{ steps.octoprint_latestrelease.outputs.release }}.sp${{ steps.simplyprint_version.outputs.release }}"
         echo "RELEASE_TAG=$RELEASE_TAG" >> $GITHUB_ENV
 
         RELEASE_BODY=""
