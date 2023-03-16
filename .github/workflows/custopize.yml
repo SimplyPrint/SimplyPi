@@ -21,7 +21,7 @@ jobs:
 
     - name: "🔎 Get OctoPrint Version"
       id: octoprint_latestrelease
-      uses: jneilliii/github-action-get-latest-release@master
+      uses: pozetroninc/github-action-get-latest-release@master
       with:
         repository: OctoPrint/OctoPrint
         excludes: prerelease, draft
@@ -29,14 +29,14 @@ jobs:
 
     - name: "🔎 Get OctoPi Version"
       id: octopi_latestrelease
-      uses: jneilliii/github-action-get-latest-release@master
+      uses: pozetroninc/github-action-get-latest-release@master
       with:
         repository: guysoft/OctoPi
         token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: "🔎 Determine SimplyPrint version"
       id: simplyprint_version
-      uses: jneilliii/github-action-get-latest-release@master
+      uses: pozetroninc/github-action-get-latest-release@master
       with:
         repository: SimplyPrint/OctoPrint-SimplyPrint
         token: ${{ secrets.GITHUB_TOKEN }}
