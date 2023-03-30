@@ -110,7 +110,7 @@ jobs:
             {
               "name": "SimplyPrint OS (aka. SimplyPi - latest)",
               "description": "Effortlessly manage 1, 2 or 100 3D printers from anywhere with the SimplyPrint ecosystem - free and easy to set up (SimplyPrint plugin on top of OctoPrint)",
-              "url": "https://github.com/SimplyPrint/SimplyPi/releases/download/$RELEASE_TAG/$IMAGE",
+              "url": "https://github.com/SimplyPrint/SimplyPi/releases/download/$RELEASE_TAG/$IMAGE.zip",
               "icon": "https://cdn.simplyprint.io/i/static/rpi-imager/icon_gradient.png",
               "extract_size": $IMAGE_SIZE,
               "extract_sha256": "$IMAGE_SHA256",
