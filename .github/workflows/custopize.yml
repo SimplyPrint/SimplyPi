@@ -82,7 +82,12 @@ jobs:
         ZIP_SHA256="$(cat $IMAGE.zip.sha256 | cut -d' ' -f1)"
         IMAGE_SIZE="$(du -sb $IMAGE | cut -f1)"
         IMAGE_SHA256="$(sha256sum $IMAGE | cut -d' ' -f1)"
-        RELEASE_DATE="$(date -u +"%Y-%m-%d")"
+
+        echo "ZIP_SIZE=$ZIP_SIZE" >> $GITHUB_ENV
+        echo "ZIP_SHA256=$ZIP_SHA256" >> $GITHUB_ENV
+        echo "IMAGE_SIZE=$IMAGE_SIZE" >> $GITHUB_ENV
+        echo "IMAGE_SHA256=$IMAGE_SHA256" >> $GITHUB_ENV
+
 
     - name: "📝 Prepare release"
       run: |
@@ -96,6 +101,8 @@ jobs:
         (git rev-parse $RELEASE_TAG >/dev/null 2>&1) || RELEASE_BODY="Created with [CustoPiZer](https://github.com/OctoPrint/CustoPiZer)"
 
         echo "RELEASE_BODY=$RELEASE_BODY" >> $GITHUB_ENV
+
+        RELEASE_DATE="$(date -u +"%Y-%m-%d")"
 
         cat > build/rpi-imager-simplypi.json << EOF
         {
