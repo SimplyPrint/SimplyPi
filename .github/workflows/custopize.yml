@@ -78,6 +78,17 @@ jobs:
         md5sum $IMAGE.zip > $IMAGE.zip.md5
         sha256sum $IMAGE.zip > $IMAGE.zip.sha256
 
+        ZIP_SIZE="$(du -sb $IMAGE.zip | cut -f1)"
+        ZIP_SHA256="$(cat $IMAGE.zip.sha256 | cut -d' ' -f1)"
+        IMAGE_SIZE="$(du -sb $IMAGE | cut -f1)"
+        IMAGE_SHA256="$(sha256sum $IMAGE | cut -d' ' -f1)"
+
+        echo "ZIP_SIZE=$ZIP_SIZE" >> $GITHUB_ENV
+        echo "ZIP_SHA256=$ZIP_SHA256" >> $GITHUB_ENV
+        echo "IMAGE_SIZE=$IMAGE_SIZE" >> $GITHUB_ENV
+        echo "IMAGE_SHA256=$IMAGE_SHA256" >> $GITHUB_ENV
+
+
     - name: "📝 Prepare release"
       run: |
         RELEASE_NAME="SimplyPi with OctoPrint ${{ steps.octoprint_latestrelease.outputs.release }}, SimplyPrint ${{ steps.simplyprint_version.outputs.release }} (based on OctoPi ${{ steps.octopi_latestrelease.outputs.release }})"
@@ -91,6 +102,27 @@ jobs:
 
         echo "RELEASE_BODY=$RELEASE_BODY" >> $GITHUB_ENV
 
+        RELEASE_DATE="$(date -u +"%Y-%m-%d")"
+
+        cat > build/rpi-imager-simplypi.json << EOF
+        {
+          "os_list": [
+            {
+              "name": "SimplyPrint OS (aka. SimplyPi - latest)",
+              "description": "Effortlessly manage 1, 2 or 100 3D printers from anywhere with the SimplyPrint ecosystem - free and easy to set up (SimplyPrint plugin on top of OctoPrint)",
+              "url": "https://github.com/SimplyPrint/SimplyPi/releases/download/$RELEASE_TAG/$IMAGE.zip",
+              "icon": "https://cdn.simplyprint.io/i/static/rpi-imager/icon_gradient.png",
+              "extract_size": $IMAGE_SIZE,
+              "extract_sha256": "$IMAGE_SHA256",
+              "image_download_size": $ZIP_SIZE,
+              "release_date": "$RELEASE_DATE",
+              "image_download_sha256": "$ZIP_SHA256",
+              "init_format": "systemd"
+            }
+          ]
+        }
+        EOF
+
     - name: "🔖 Create release & attach assets"
       uses: softprops/action-gh-release@v1
       with:
@@ -103,5 +135,6 @@ jobs:
           build/${{ env.IMAGE }}.zip
           build/${{ env.IMAGE }}.zip.md5
           build/${{ env.IMAGE }}.zip.sha256
+          build/rpi-imager-simplypi.json
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
