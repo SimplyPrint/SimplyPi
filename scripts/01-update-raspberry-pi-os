@@ -7,5 +7,8 @@ export DEBIAN_FRONTEND=noninteractive
 source /common.sh
 install_cleanup_trap
 
-apt update --allow-releaseinfo-change
-apt upgrade -y
+apt-get update --allow-releaseinfo-change
+apt-get -y \
+  -o Dpkg::Options::="--force-confdef" \
+  -o Dpkg::Options::="--force-confold" \
+  upgrade
