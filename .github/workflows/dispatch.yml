@@ -19,7 +19,7 @@ jobs:
       uses: pozetroninc/github-action-get-latest-release@master
       with:
         repository: ${{ github.repository }}
-        token: ${{ secrets.REPODISPATCH_TOKEN }}
+        token: ${{ secrets.PAT }}
 
     - id: octoprint_latestrelease
       name: 🔎 Get OctoPrint Version
@@ -27,7 +27,7 @@ jobs:
       with:
         repository: OctoPrint/OctoPrint
         excludes: prerelease,draft
-        token: ${{ secrets.REPODISPATCH_TOKEN }}
+        token: ${{ secrets.PAT }}
 
     - id: octopi_latestrelease
       name: 🔎 Get OctoPi Version
@@ -35,7 +35,7 @@ jobs:
       with:
         repository: guysoft/OctoPi
         excludes: prerelease,draft
-        token: ${{ secrets.REPODISPATCH_TOKEN }}
+        token: ${{ secrets.PAT }}
 
     - id: simplyprint_latestrelease
       name: 🔎 Get SimplyPrint Version
@@ -43,7 +43,7 @@ jobs:
       with:
         repository: SimplyPrint/OctoPrint-SimplyPrint
         excludes: prerelease,draft
-        token: ${{ secrets.REPODISPATCH_TOKEN }}
+        token: ${{ secrets.PAT }}
 
     - name: 💁 Print Versions
       run: |
@@ -56,7 +56,7 @@ jobs:
       if: ${{ format('{0}.op{1}.sp{2}', steps.octopi_latestrelease.outputs.release, steps.octoprint_latestrelease.outputs.release, steps.simplyprint_latestrelease.outputs.release) != steps.my_latestrelease.outputs.release }}
       uses: peter-evans/repository-dispatch@v2
       with:
-        token: ${{ secrets.REPODISPATCH_TOKEN }}
+        token: ${{ secrets.PAT }}
         repository: SimplyPrint/SimplyPi
         event-type: octoprint_release
         client-payload: '{"version": "${{ steps.octoprint_latestrelease.outputs.release }}"}'
